@@ -319,8 +319,19 @@ function syncStatus(state,label){
 
 onValue(ref(db,"dashboard"),(snapshot)=>{
   const val=snapshot.val();
-  DATA=val?val:JSON.parse(JSON.stringify(DEF));
-  if(!val) set(ref(db,"dashboard"),JSON.parse(JSON.stringify(DEF)));
+  if(!val){
+    DATA=JSON.parse(JSON.stringify(DEF));
+    set(ref(db,"dashboard"),DATA);
+  } else {
+    // Merge: keep Firebase data but fill in any missing keys from DEF
+    DATA=val;
+    let needsUpdate=false;
+    if(!DATA.playbook){DATA.playbook=JSON.parse(JSON.stringify(DEF.playbook));needsUpdate=true;}
+    if(!DATA.util){DATA.util=JSON.parse(JSON.stringify(DEF.util));needsUpdate=true;}
+    if(!DATA.cupons){DATA.cupons=JSON.parse(JSON.stringify(DEF.cupons));needsUpdate=true;}
+    if(!DATA.ind){DATA.ind=JSON.parse(JSON.stringify(DEF.ind));needsUpdate=true;}
+    if(needsUpdate) set(ref(db,"dashboard"),DATA);
+  }
   syncStatus("ok","Sincronizado");
   buildPills(); renderCourse();
   if(currentView==="cupons") renderCupons();
