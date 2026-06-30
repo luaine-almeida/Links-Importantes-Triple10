@@ -122,11 +122,25 @@ tr:hover td{background:#FAFAFA}
 .toast{position:fixed;bottom:24px;right:24px;background:#111827;color:#fff;font-size:13px;padding:10px 16px;border-radius:10px;font-weight:500;z-index:200;opacity:0;transition:opacity .3s;pointer-events:none;display:flex;align-items:center;gap:6px}
 .toast.show{opacity:1}
 .col-hdr{font-size:10px;color:#9CA3AF;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+
+.footer{margin-top:2.5rem;padding-top:1rem;border-top:0.5px solid #F3F4F6;display:flex;justify-content:flex-end}
+.edit-footer-btn{font-size:11px;color:#D1D5DB;background:transparent;border:none;cursor:pointer;font-family:inherit;padding:4px 8px;border-radius:6px;display:none;align-items:center;gap:4px;transition:color .2s}
+.edit-footer-btn:hover{color:#9CA3AF}
 .loading-screen{display:flex;align-items:center;justify-content:center;min-height:200px;flex-direction:column;gap:12px;color:#9CA3AF;font-size:13px}
 .spinner{width:24px;height:24px;border:2px solid #E5E7EB;border-top-color:#111827;border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .empty-state{text-align:center;padding:3rem 1rem;color:#9CA3AF;font-size:13px}
 .empty-state i{font-size:32px;display:block;margin-bottom:8px}
+.pb-group{margin-bottom:1.5rem}
+.pb-group-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#9CA3AF;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.pb-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.pb-card{background:#fff;border:0.5px solid #E5E7EB;border-radius:12px;padding:12px 14px;text-decoration:none;display:flex;align-items:flex-start;gap:10px;transition:border-color .15s,box-shadow .15s}
+.pb-card:hover{border-color:#9CA3AF;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.pb-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px}
+.pb-name{font-size:13px;font-weight:500;color:#111827;line-height:1.3;margin-bottom:2px}
+.pb-desc{font-size:11px;color:#9CA3AF;line-height:1.4}
+.pb-edit-row{display:grid;grid-template-columns:120px 1fr 1fr 28px;gap:8px;margin-bottom:8px;align-items:center}
+.pb-edit-row .field-input{font-size:12px;padding:5px 8px}
 </style>
 </head>
 <body>
@@ -138,10 +152,6 @@ tr:hover td{background:#FAFAFA}
     </div>
     <div class="brand-right" id="brandRight">
       <div class="sync-status"><div class="sync-dot loading" id="syncDot"></div><span id="syncLabel">Conectando...</span></div>
-      <button class="btn" id="editBtn" onclick="openEdit()" style="display:none"><i class="ti ti-edit" style="font-size:14px" aria-hidden="true"></i> Editar</button>
-      <button class="btn" id="cupEditBtn" onclick="openCuponsEdit()" style="display:none"><i class="ti ti-edit" style="font-size:14px" aria-hidden="true"></i> Editar cupons</button>
-      <button class="btn" id="indEditBtn" onclick="openIndEdit()" style="display:none"><i class="ti ti-edit" style="font-size:14px" aria-hidden="true"></i> Editar indicações</button>
-      <button class="btn" id="utilEditBtn" onclick="openUtilEdit()" style="display:none"><i class="ti ti-edit" style="font-size:14px" aria-hidden="true"></i> Editar links</button>
     </div>
   </div>
 
@@ -150,6 +160,7 @@ tr:hover td{background:#FAFAFA}
     <button class="mnav" data-v="cupons" onclick="setView('cupons')"><i class="ti ti-tag" style="font-size:14px" aria-hidden="true"></i> Cupons</button>
     <button class="mnav" data-v="indicacao" onclick="setView('indicacao')"><i class="ti ti-users" style="font-size:14px" aria-hidden="true"></i> Indicação</button>
     <button class="mnav" data-v="util" onclick="setView('util')"><i class="ti ti-link" style="font-size:14px" aria-hidden="true"></i> Links úteis</button>
+    <button class="mnav" data-v="playbook" onclick="setView('playbook')"><i class="ti ti-book-2" style="font-size:14px" aria-hidden="true"></i> Playbook</button>
   </div>
 
   <div id="view-cursos">
@@ -159,6 +170,14 @@ tr:hover td{background:#FAFAFA}
   <div id="view-cupons" style="display:none"><div id="cupons-main"><div class="loading-screen"><div class="spinner"></div>Carregando...</div></div></div>
   <div id="view-indicacao" style="display:none"><div id="ind-main"><div class="loading-screen"><div class="spinner"></div>Carregando...</div></div></div>
   <div id="view-util" style="display:none"><div id="util-main"><div class="loading-screen"><div class="spinner"></div>Carregando...</div></div></div>
+  <div id="view-playbook" style="display:none"><div id="playbook-main"><div class="loading-screen"><div class="spinner"></div>Carregando...</div></div></div>
+  <div class="footer">
+    <button class="edit-footer-btn" id="editBtn" onclick="openEdit()"><i class="ti ti-pencil" style="font-size:11px" aria-hidden="true"></i> editar</button>
+    <button class="edit-footer-btn" id="cupEditBtn" onclick="openCuponsEdit()"><i class="ti ti-pencil" style="font-size:11px" aria-hidden="true"></i> editar</button>
+    <button class="edit-footer-btn" id="indEditBtn" onclick="openIndEdit()"><i class="ti ti-pencil" style="font-size:11px" aria-hidden="true"></i> editar</button>
+    <button class="edit-footer-btn" id="utilEditBtn" onclick="openUtilEdit()"><i class="ti ti-pencil" style="font-size:11px" aria-hidden="true"></i> editar</button>
+    <button class="edit-footer-btn" id="playbookEditBtn" onclick="openPlaybookEdit()"><i class="ti ti-pencil" style="font-size:11px" aria-hidden="true"></i> editar</button>
+  </div>
 </div>
 
 <div class="overlay" id="overlay">
@@ -255,6 +274,32 @@ const DEF = {
     {nome:"Linktree TripleTen Brasil",link:"https://linktr.ee/tripletenbrasil"},
     {nome:"Blog T10",link:"https://tripleten.com.br/blog/"},
     {nome:"WordPress MBA",link:"https://wordpress.tripleten.com.br/mba/"}
+  ],
+  playbook:[
+    {grupo:"SDR",emoji:"📋",nome:"Pipeline SDR",desc:"Etapas e gestão do pipeline",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/sdr/pipeline-sdr"},
+    {grupo:"SDR",emoji:"⏱",nome:"SLA, Cadência e Prioridades",desc:"Tempos de resposta e priorização",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/sdr/sla-cadência-e-prioridades"},
+    {grupo:"SDR",emoji:"📞",nome:"Abordagem & Fluxo de Contato",desc:"Como abordar e sequência de contatos",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/sdr/abordagem-fluxo-de-contato"},
+    {grupo:"SDR",emoji:"📅",nome:"Agendamento de Reunião",desc:"Processo de agendamento",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/sdr/agendamento-de-reunião"},
+    {grupo:"SDR",emoji:"✅",nome:"Qualificação & Boas práticas",desc:"Como qualificar o lead corretamente",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/sdr/qualificação-boas-práticas"},
+    {grupo:"SDR",emoji:"🗣",nome:"Scripts de Ligação",desc:"Roteiros para chamadas",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/sdr/scripts-de-ligação"},
+    {grupo:"SDR",emoji:"💬",nome:"Templates de Mensagens",desc:"Modelos prontos de mensagens",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/sdr/templates-de-mensagens"},
+    {grupo:"SDR",emoji:"❌",nome:"Closed Lost – Motivos e regras",desc:"Quando e como marcar lost",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/sdr/closed-lost-motivos-e-regras"},
+    {grupo:"SDR",emoji:"📊",nome:"Performance – SDR",desc:"Metas e indicadores SDR",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/sdr/performance-sdr"},
+    {grupo:"Closer",emoji:"🎯",nome:"Antes da Reunião",desc:"Preparação e checklist pré-reunião",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/closer/antes-da-reunião"},
+    {grupo:"Closer",emoji:"🤝",nome:"Durante a Reunião",desc:"Condução e melhores práticas",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/closer/durante-a-reunião"},
+    {grupo:"Closer",emoji:"📝",nome:"Após a Reunião",desc:"Follow up e próximos passos",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/closer/após-reunião"},
+    {grupo:"Closer",emoji:"💳",nome:"Cliente quer pagar",desc:"Processo de fechamento e pagamento",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/closer/cliente-quer-pagar"},
+    {grupo:"Closer",emoji:"🔄",nome:"Pipeline & Posse de Lead",desc:"Gestão do pipeline Closer",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/closer/pipeline-posse-de-lead"},
+    {grupo:"Closer",emoji:"🏆",nome:"Performance & Metas",desc:"Indicadores e metas do Closer",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/closer/performance-metas"},
+    {grupo:"Closer",emoji:"📜",nome:"Script Oficial da Reunião",desc:"Roteiro oficial de reunião",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/closer/script-oficial-da-reunião"},
+    {grupo:"Geral",emoji:"🗺",nome:"Jornada do Lead",desc:"Visão geral do funil",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/jornada-do-lead"},
+    {grupo:"Geral",emoji:"🔧",nome:"Pipeline Hubspot",desc:"Como usar o HubSpot",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/jornada-do-lead/pipeline-hubspot"},
+    {grupo:"Geral",emoji:"💰",nome:"Pagamentos e JIRA",desc:"Processo de pagamento e JIRA",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/pagamentos-e-jira"},
+    {grupo:"Geral",emoji:"⚠️",nome:"Regras importantes",desc:"Regras gerais da operação",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/regras-importantes"},
+    {grupo:"Geral",emoji:"🔁",nome:"No-Show e Follow Up",desc:"Como tratar no-shows",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/no-show-e-follow-up"},
+    {grupo:"Geral",emoji:"❓",nome:"FAQ e Glossário",desc:"Perguntas frequentes e termos",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/faq-e-glossário"},
+    {grupo:"Geral",emoji:"🛠",nome:"Ferramentas",desc:"Ferramentas utilizadas pelo time",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/ferramentas"},
+    {grupo:"Geral",emoji:"📈",nome:"Métricas Gerais",desc:"KPIs e métricas do time",link:"https://sites.google.com/tripleten.com/portal-salesteam/página-inicial/métricas-gerais"}
   ]
 };
 
@@ -281,7 +326,8 @@ onValue(ref(db,"dashboard"),(snapshot)=>{
   if(currentView==="cupons") renderCupons();
   if(currentView==="indicacao") renderInd();
   if(currentView==="util") renderUtil();
-  document.getElementById("editBtn").style.display="flex";
+  if(currentView==="playbook") renderPlaybook();
+  setView(currentView);
 },(error)=>{
   syncStatus("error","Erro de conexão");
   DATA=JSON.parse(JSON.stringify(DEF));
@@ -297,16 +343,18 @@ async function saveToFirebase(path,value){
 function setView(v){
   currentView=v;
   document.querySelectorAll(".mnav").forEach(b=>b.classList.toggle("on",b.dataset.v===v));
-  ["cursos","cupons","indicacao","util"].forEach(id=>{
+  ["cursos","cupons","indicacao","util","playbook"].forEach(id=>{
     document.getElementById("view-"+id).style.display=v===id?"block":"none";
   });
   document.getElementById("editBtn").style.display=v==="cursos"?"flex":"none";
   document.getElementById("cupEditBtn").style.display=v==="cupons"?"flex":"none";
   document.getElementById("indEditBtn").style.display=v==="indicacao"?"flex":"none";
   document.getElementById("utilEditBtn").style.display=v==="util"?"flex":"none";
+  document.getElementById("playbookEditBtn").style.display=v==="playbook"?"flex":"none";
   if(v==="cupons") renderCupons();
   if(v==="indicacao") renderInd();
   if(v==="util") renderUtil();
+  if(v==="playbook") renderPlaybook();
 }
 
 function buildPills(){
@@ -494,6 +542,93 @@ async function saveUtil(){
   await saveToFirebase("dashboard/util",editUtil);
 }
 
+
+// ── PLAYBOOK ──────────────────────────────────────────────────────────────
+const PB_GROUPS={
+  "SDR":{bg:"#EFF6FF",tc:"#1E3A8A",ic:"ti-headset"},
+  "Closer":{bg:"#F0FDF4",tc:"#14532D",ic:"ti-star"},
+  "Geral":{bg:"#F9FAFB",tc:"#374151",ic:"ti-adjustments"}
+};
+
+function renderPlaybook(){
+  if(!DATA) return;
+  const items=DATA.playbook||[];
+  if(!items.length){
+    document.getElementById("playbook-main").innerHTML='<div class="empty-state"><i class="ti ti-book-2" aria-hidden="true"></i>Nenhum item no playbook.<br>Clique em "editar" para adicionar.</div>';
+    return;
+  }
+  const groups={};
+  items.forEach(item=>{
+    if(!groups[item.grupo]) groups[item.grupo]=[];
+    groups[item.grupo].push(item);
+  });
+  const order=["SDR","Closer","Geral"];
+  const allGroups=[...order.filter(g=>groups[g]),...Object.keys(groups).filter(g=>!order.includes(g))];
+  let h='';
+  allGroups.forEach(grp=>{
+    const g=PB_GROUPS[grp]||{bg:"#F9FAFB",tc:"#374151",ic:"ti-folder"};
+    h+=`<div class="pb-group"><div class="pb-group-title"><i class="ti ${g.ic}" style="font-size:13px;color:${g.tc}" aria-hidden="true"></i><span style="color:${g.tc}">${grp}</span></div><div class="pb-cards">`;
+    groups[grp].forEach(item=>{
+      h+=`<a class="pb-card" href="${item.link}" target="_blank">
+        <div class="pb-icon" style="background:${g.bg}"><span style="font-size:16px">${item.emoji||"📌"}</span></div>
+        <div><div class="pb-name">${item.nome}</div><div class="pb-desc">${item.desc||""}</div></div>
+      </a>`;
+    });
+    h+=`</div></div>`;
+  });
+  document.getElementById("playbook-main").innerHTML=h;
+}
+
+let editPlaybook=[];
+function openPlaybookEdit(){
+  editPlaybook=JSON.parse(JSON.stringify(DATA.playbook||[]));
+  document.getElementById("modalTitle").textContent="Editar Playbook";
+  document.getElementById("modalTabs").style.display="none";
+  document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("on"));
+  document.getElementById("tab-turma").classList.add("on");
+  buildPlaybookForm();
+  document.getElementById("saveBtn").onclick=savePlaybook;
+  document.getElementById("overlay").classList.add("open");
+}
+function buildPlaybookForm(){
+  document.getElementById("tab-turma").innerHTML=`<div class="modal-section">
+    <div class="modal-section-title">Itens do Playbook</div>
+    <div style="display:grid;grid-template-columns:120px 40px 1fr 1fr 28px;gap:8px;margin-bottom:6px">
+      <div class="col-hdr">Grupo</div>
+      <div class="col-hdr">Emoji</div>
+      <div class="col-hdr">Nome</div>
+      <div class="col-hdr">Link</div>
+      <div></div>
+    </div>
+    <div id="pbRows">${editPlaybook.map((item,i)=>`
+      <div class="pb-edit-row" style="grid-template-columns:120px 40px 1fr 1fr 28px">
+        <input class="field-input" id="pbg_${i}" value="${esc(item.grupo)}" placeholder="SDR / Closer / Geral">
+        <input class="field-input" id="pbe_${i}" value="${esc(item.emoji||"")}" placeholder="📋">
+        <input class="field-input" id="pbn_${i}" value="${esc(item.nome)}" placeholder="Nome do item">
+        <input class="field-input" id="pbl_${i}" value="${esc(item.link)}" placeholder="https://...">
+        <button class="btn-remove" onclick="removePbItem(${i})"><i class="ti ti-x" style="font-size:11px" aria-hidden="true"></i></button>
+      </div>`).join("")}</div>
+    <button class="btn-add-row" onclick="addPbItem()"><i class="ti ti-plus" style="font-size:12px" aria-hidden="true"></i> Adicionar item</button>
+    <div style="margin-top:12px;font-size:11px;color:#9CA3AF;background:#F9FAFB;border-radius:8px;padding:8px 12px">
+      💡 Use os grupos <strong>SDR</strong>, <strong>Closer</strong> ou <strong>Geral</strong> para organizar os cards por seção.
+    </div>
+  </div>`;
+}
+function collectPlaybook(){
+  editPlaybook=editPlaybook.map((_,i)=>({
+    grupo:gv2(`pbg_${i}`),emoji:gv2(`pbe_${i}`),
+    nome:gv2(`pbn_${i}`),desc:gv2(`pbd_${i}`)||editPlaybook[i]?.desc||"",
+    link:gv2(`pbl_${i}`)
+  })).filter(x=>x.nome);
+}
+function addPbItem(){collectPlaybook();editPlaybook.push({grupo:"Geral",emoji:"📌",nome:"",desc:"",link:""});buildPlaybookForm();}
+function removePbItem(i){collectPlaybook();editPlaybook.splice(i,1);buildPlaybookForm();}
+async function savePlaybook(){
+  collectPlaybook();DATA.playbook=JSON.parse(JSON.stringify(editPlaybook));
+  closeModal();renderPlaybook();toast("Playbook atualizado! Visível para todo o time ✓");
+  await saveToFirebase("dashboard/playbook",editPlaybook);
+}
+
 // ── HELPERS ───────────────────────────────────────────────────────────────
 function gv(id){const el=document.getElementById(id);return el?(el.value||"").trim():"";}
 function gv2(id){const el=document.getElementById(id);return el?el.value.trim():"";}
@@ -508,6 +643,7 @@ window.addProj=addProj;window.removeProj=removeProj;window.addPay=addPay;window.
 window.addCupon=addCupon;window.removeCupon=removeCupon;
 window.addInd=addInd;window.removeInd=removeInd;
 window.addUtil=addUtil;window.removeUtil=removeUtil;
+window.openPlaybookEdit=openPlaybookEdit;window.addPbItem=addPbItem;window.removePbItem=removePbItem;
 </script>
 </body>
 </html>
